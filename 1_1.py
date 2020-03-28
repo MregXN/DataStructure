@@ -14,7 +14,6 @@
 
 
 import numpy as py
-import pdb
 
 class Node(object):
     def __init__(self,coef=0,expon=0,pnext=0):
@@ -217,7 +216,6 @@ def multiple(l1,l2):
 if __name__ == '__main__' :
     l1 = LinkList()
     l2 = LinkList()
-    sum = LinkList();
     l1.initlist([ 4,3,4,-5,2,6,1,-2,0])
     l2.initlist([ 3,5,20,-7,4,3,1])
 
