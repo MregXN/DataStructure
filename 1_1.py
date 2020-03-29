@@ -1,231 +1,86 @@
-# 
-#   设计函数分别求两个一元多项式的乘积与和
 #
-#   输入样例：
-#   4 3 4 -5 2 6 1 -2 0 （3x^4-5x^2-6x-2）
-#   3 5 20 -7 4 3 1 （5x^20-7x^4+3x）
-#   
-#   输出样例：
-#   15 24 -25 22 30 21 -10 20 -21 8 35 6 -33 5 14 4 -15 3 18 2 -6 1 
-#   5 20 -4 4 -5 2 9 1 -2 0
-# 
-# 
-#   ps:多项式表示可用数组或链表，比较简单的方法是动态数组,这里用户链表
+#   给定N个整数的序列，求最大连续子列和，当和为负数时则返回零
+#
+
+import numpy as np
+import math
 
 
-import numpy as py
+# 算法1
+def MaxSubseqSum1(A, N):
+    MaxSum = 0
+    for i in np.arange(0, N, 1):
+        for j in np.arange(0, N, 1):
+            ThisSum = 0
+            for k in np.arange(i, j, 1):
+                ThisSum += A[k]
+            if ThisSum > MaxSum:
+                MaxSum = ThisSum
 
-class Node(object):
-    def __init__(self,coef=0,expon=0,pnext=0):
-        self.coef = coef
-        self.expon = expon
-        self.next = pnext  
-
-
-# self.head 节点中不放数据，作为链表头
-class LinkList(object):
-    def __init__(self):
-        self.head = Node();
-
-    def __getitem__(self,key):
-        if self.is_empty():
-            print(" linklist is empty.")
-            return
-        elif key < 0 or key > self.getlength():
-            print("the given key is error")
-            return          
-        else:
-            return self.getitem(key)
-
-    def __setitme__(self,key,value):
-        if self.is_empty():
-            print(" linklist is empty.")
-            return
-        elif key < 0 or key > self.getlength():
-            print("the given key is error")
-            return            
-        else:
-            self.delete(key)
-            return self.insert(key)
-    
-    def initlist(self,data):
-
-        self.head.coef = data[0]
-        p = self.head
-
-        if len(data) > 1 :
-            toggle_flag = True;
-            for i in data[1:]:
-                if  toggle_flag:
-                    node = Node(coef=i,expon=0)
-                else:
-                    node.expon = i
-                    p.next = node
-                    p = p.next           
-                toggle_flag = not toggle_flag
-
-    def getlength(self):
-        p = self.head
-        length = 0
-        while p.next != 0:
-            length += 1
-            p = p.next
-
-        return length
-
-    def is_empty(self):
-        if self.getlength() ==0:
-            return True
-        else:
-            return False
-
-    def clear(self):
-        self.head = 0
-
-    def append(self,coef,expon):
-        node = Node(coef,expon)
-        if self.head.next == 0:
-            self.head.next  = node 
-        else:
-            p = self.head
-            while p.next != 0 :
-                p = p.next
-            
-            p.next = node 
-
-        
-    def getitem(self,index):
-        if self.is_empty():
-            print('Linklist is empty.')
-            return
-        j = 0
-        p = self.head
-
-        while p.next!=0 and j <index:
-            p = p.next
-            j+=1
-
-        if j ==index:
-            return p.coef,p.expon
-        else:
-            print('target is not exist!') 
+    return MaxSum
 
 
-    def insert(self,index,coef,expon):
-        if self.is_empty() or index<0 or index >self.getlength():
-            print('Linklist is empty.')
-            return   
+# 算法2
+def MaxSubseqSum2(A, N):
+    MaxSum = 0
+    for i in np.arange(0, N, 1):
+        ThisSum = 0
+        for j in np.arange(0, N, 1):
+            ThisSum += A[j]
+            if ThisSum > MaxSum:
+                MaxSum = ThisSum
 
-        if index == 0 :
-            q = Node(coef,expon)
-            self.head = q
-
-        p = self.head
-        post = self.head
-        j = 0
-        while p.next !=0 and j < index :
-            post = p
-            p = p.next
-            j+=1
-
-        if index == j :
-            q= Node(coef,expon)
-            post.next = q
-            q.next = p
-
-    def delete(self,index):
-
-        if self.is_empty() or index<0 or index >self.getlength():
-            print('Linklist is empty.')
-            return
-
-        if index ==0:
-            q = self.head 
-            self.head = q.next
-
-        p = self.head
-        post  = self.head
-        j = 0
-        while p.next!=0 and j<index:
-            post = p
-            p = p.next
-            j+=1
-
-        if index ==j:
-            post.next = p.next       
-
-    def printall(self):
-        length = self.getlength()
-        i=0
-        while length:
-            i+=1
-            print(self.getitem(i))
-            length-=1
+    return MaxSum
 
 
+# 算法3
+def MaxSubseqSum3(A, left, right):
+    if left == right:
+        return A[left]
 
-def add(l1,l2):
+    mid = (left + right) / 2
+    MaxLeftSum = MaxSubseqSum3(A, left, math.floor(mid))
+    MaxRightSum = MaxSubseqSum3(A, math.ceil(mid), right)
 
-    p1 = l1
-    p2 = l2
-    sum = LinkList()
+    MaxLeftBorderSum = 0
+    LeftBorderSum = 0
+    for i in np.arange(math.floor(mid), left - 1, -1):
+        LeftBorderSum += A[i]
+        if LeftBorderSum > MaxLeftBorderSum:
+            MaxLeftBorderSum = LeftBorderSum
 
-    while p1 and p2 :
-        if p1.expon == p2.expon:
-            if p1.coef + p2.coef != 0:
-                sum.append(p1.coef + p2.coef , p1.expon )
-                p1 = p1.next
-                p2 = p2.next
-        elif p1.expon > p2.expon:
-            sum.append(p1.coef, p1.expon )
-            p1 = p1.next
-        else:
-            sum.append(p2.coef, p2.expon )
-            p2 = p2.next
-        
-    while(p1):
-        sum.append(p1.coef, p1.expon )
-        p1 = p1.next
-
-    while(p2):
-        sum.append(p2.coef, p2.expon )
-        p2 = p2.next
-
-    return sum
+    MaxRightBorderSum = 0
+    RightBorderSum = 0
+    for i in np.arange(math.ceil(mid), right + 1, 1):
+        RightBorderSum += A[i]
+        if RightBorderSum > MaxRightBorderSum:
+            MaxRightBorderSum = RightBorderSum
+    return max(MaxLeftSum, MaxRightSum, MaxLeftBorderSum + MaxRightBorderSum)
 
 
-def multiple(l1,l2):
-    p1 = l1
-    p2 = l2
-    result = LinkList()
-    temp = LinkList()
+# 算法4
+def MaxSubseqSum4(A, N):
+    ThisSum = 0
+    MaxSum = 0
 
-    while p1 :
-        while p2:
-            temp.append(p1.coef*p2.coef,p1.expon+p2.expon)
-            p2 = p2.next
-        
-        result = add(result.head.next,temp.head.next)
+    for i in A:
+        ThisSum += i
+        if ThisSum > MaxSum:
+            MaxSum = ThisSum
+        elif ThisSum < 0:
+            ThisSum = 0
 
-        p2 = l2
-        p1 = p1.next
-        temp = LinkList()
+    return MaxSum
 
-    return result
 
-if __name__ == '__main__' :
-    l1 = LinkList()
-    l2 = LinkList()
-    l1.initlist([ 4,3,4,-5,2,6,1,-2,0])
-    l2.initlist([ 3,5,20,-7,4,3,1])
+if __name__ == '__main__':
+    A = [1, 2, 3, 4, 5, -6, 7, -8]
+    result1 = MaxSubseqSum1(A, len(A))
+    result2 = MaxSubseqSum2(A, len(A))
+    result3 = MaxSubseqSum3(A, 0, len(A) - 1)
+    result4 = MaxSubseqSum4(A, len(A))
 
-    # #multiple
-    print("the result is : ")
-    result = multiple(l1.head.next,l2.head.next) # 跳过头结点，从第一个数据开始
-    result.printall()
-
-    #add
-    result = add(l1.head.next,l2.head.next) # 跳过头结点，从第一个数据开始
-    print("the result is : ")
-    result.printall()
-
+    print(result1)
+    print(result2)
+    print(result3)
+    print(result4)
