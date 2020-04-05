@@ -42,16 +42,24 @@ NULL = -1
 
 class Union(object):
     def __init__(self, num):
-        self.union = [NULL] * (num+1)
-        self.union[0] = 999 #下标为0的位置未使用
-
-    def InputConnection(self, node1, node2):
-        self.union[node2] = node1
+        self.union = [NULL] * (num + 1)
+        self.union[0] = 999  #下标为0的位置未使用
 
     def Find(self, node):
-        while (self.union[node] >= 0):
-            node = self.union[node]
-        return node
+        # 路径压缩
+        if self.union[node] < 0:
+            return node
+        else:
+            self.union[node] = self.Find(self.union[node])
+            return self.union[node]
+
+    def InputConnection(self, node1, node2):
+        # 按秩归并
+        if self.union[self.Find(node2)] < self.union[self.Find(node1)]:
+            self.union[self.Find(node1)] = self.Find(node2)
+        else:
+            self.union[self.Find(node1)] += self.union[self.Find(node2)]
+            self.union[self.Find(node2)] = self.Find(node1)
 
     def CheckConnection(self, node1, node2):
         if self.Find(node1) == self.Find(node2):
@@ -62,7 +70,7 @@ class Union(object):
     def CheckNetwork(self):
         count = 0
         for i in self.union:
-            if i == NULL:
+            if i < 0:
                 count += 1
 
         if count == 1:
@@ -93,7 +101,6 @@ if __name__ == "__main__":
     U.Cmd(['C', 3, 5])
 
     U.Cmd(['S'])
-
 
     print("样例2：")
     U = Union(5)
