@@ -43,7 +43,7 @@ NULL = -1
 class Union(object):
     def __init__(self, num):
         self.union = [NULL] * (num + 1)
-        self.union[0] = 999  #下标为0的位置未使用
+        self.union[0] = 999  # 下标为0的位置未使用
 
     def Find(self, node):
         # 路径压缩
@@ -117,4 +117,4 @@ if __name__ == "__main__":
     U.Cmd(['I', 1, 3])
     U.Cmd(['C', 1, 5])
 
-    U.Cmd(['S'])
+    U.Cmd(['S'])   
