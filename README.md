@@ -9,3 +9,6 @@ B站上数据结构的网课，链接是https://www.bilibili.com/video/BV1JW411i
 4.2 给定序列，判断是否能构成同一搜索树
 5.1 File Transfer
 5.2 堆中的路径
+6.1 拯救007
+6.2 六度空间
+6.3 邻接矩阵的表示
