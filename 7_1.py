@@ -39,29 +39,38 @@ class Heap(object):
         self.heap[m.floor(i)] = node
 
     def DeleteMin(self):
-        self.length -= 1
         i = self.length
+        #print("the delete elemnet is : %d" % self.heap[i].weight)
+        self.length -= 1
         return self.heap[i]
 
     def PrintAll(self):
-        for i in np.arange(1, self.length+1, 1):
+        for i in np.arange(1, self.length + 1, 1):
             # if type(i).__name__ == 'TreeNode':
             print(self.heap[i].weight)
 
 
 def Huffman(input):
-    T = TreeNode()
     H = Heap(input)
-    for i in np.arange(1,H.length+1,1):
+    for i in np.arange(1, H.length, 1):
+        T = TreeNode()
         T.left = H.DeleteMin()
         T.right = H.DeleteMin()
         T.weight = T.left.weight + T.right.weight
         H.Insert(T)
-    T = H.DeleteMin()
 
-    H.PrintAll()
-    return T
+    Huffman = H.DeleteMin()
+    return Huffman
+
+
+def WPL(T, depth):
+    if type(T.left).__name__ == 'TreeNode' and type(T.left).__name__ == 'TreeNode':
+        return WPL(T.left, depth + 1) + WPL(T.right, depth + 1)
+    else:
+        return depth * T.weight
 
 
 if __name__ == '__main__':
     H = Huffman([1, 2, 3, 4])
+    print(WPL(H, 0))
+    #delete 有问题，应该删除的是根节点，再进行调整
