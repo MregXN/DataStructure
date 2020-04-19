@@ -11,7 +11,7 @@ T = [-1] * 10
 
 
 def GetLeftLength(n):
-    H = m.floor(m.log(n+1))
+    H = m.floor(m.log(n+1, 2))
     X = n + 1 - 2**H
 
     if X > 2**(H - 1):
@@ -27,9 +27,6 @@ def solve(ALeft, ARight,
     if (n == 0):
         return
     L = GetLeftLength(n)
-    print(int(ALeft + L))
-    print(TRoot)
-    print("------------")
     T[TRoot] = A[int(ALeft + L)]
     LeftTRoot = 2 * TRoot + 1
     RightTRoot = LeftTRoot + 1
