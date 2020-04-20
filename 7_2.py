@@ -6,7 +6,7 @@ import numpy as np
 
 Pre = [1, 2, 3, 4, 5, 6]
 In = [3, 2, 4, 1, 6, 5]
-Post = [0]*6
+Post = [0] * 6
 
 
 def solve(prel, inl, postl, n):  # prel inl postl 各自第一个节点的位置
@@ -17,15 +17,16 @@ def solve(prel, inl, postl, n):  # prel inl postl 各自第一个节点的位置
         Post[postl] = Pre[prel]
 
     root = Pre[prel]
-    Post[postl+n-1] = root
+    Post[postl + n - 1] = root
     for i in np.arange(0, 6, 1):
-        if In[inl+i] == root:
+        if In[inl + i] == root:
             L = i
-            R = n-L-1
+            R = n - L - 1
             break
-    solve(prel+1, inl, postl, L)
-    solve(prel+L+1, inl+L+1, postl+L, R)
+    solve(prel + 1, inl, postl, L)
+    solve(prel + L + 1, inl + L + 1, postl + L, R)
 
-if __name__  == "__main__":
+
+if __name__ == "__main__":
     solve(0, 0, 0, 6)
     print(Post)

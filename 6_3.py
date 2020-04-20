@@ -7,7 +7,8 @@
 
 
 import numpy as np
-MaxVertexNum = 10
+MaxVertexNum = 100
+INFINITY = 65535
 
 
 class Enode(object):
@@ -19,7 +20,9 @@ class Enode(object):
 
 class MGraph(object):
     def __init__(self, N):
-        self.G = np.zeros([N, N])
+        self.G = np.full((N, N), INFINITY)
+        self.Nv = 0 # 顶点数
+        self.Ne = 0 # 边数
 
     def InsertEdge(self, Enode):
         self.G[Enode.V1][Enode.V2] = Enode.Weight
