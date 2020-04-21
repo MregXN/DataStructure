@@ -34,10 +34,10 @@ class Enode(object):
 
 
 class MGraph(object):
-    def __init__(self, Nv,Ne):
+    def __init__(self, Nv, Ne):
         self.G = np.full((Nv, Nv), INFINITY)
-        self.Nv = Nv # 顶点数
-        self.Ne = Ne # 边数
+        self.Nv = Nv  # 顶点数
+        self.Ne = Ne  # 边数
 
     def InsertEdge(self, Enode):
         i = Enode.V1 - 1  # 题目编号从1开始，数组编号从0开始
@@ -51,8 +51,8 @@ class MGraph(object):
         for i in np.arange(0, self.Nv, 1):
             for j in np.arange(0, self.Nv, 1):
                 for k in np.arange(0, self.Nv, 1):
-                    if D[i][k]+D[k][j] < D[i][j]:
-                        D[i][j] = D[i][k]+D[k][j]
+                    if self.D[i][k] + self.D[k][j] < self.D[i][j]:
+                        self.D[i][j] = self.D[i][k] + self.D[k][j]
 
     def FindMin(self):
         MinDist = INFINITY
@@ -63,14 +63,33 @@ class MGraph(object):
                 return
             if MinDist > MaxDist:
                 MinDist = MaxDist
-                Animal = i+1
+                Animal = i + 1
+        return Animal
 
-    
-    def FindMaxDist(self, i): # i 表示行数
+    def FindMaxDist(self, i):  # i 表示行数
         MaxDist = 0
         for j in np.arange(0, self.Nv, 1):
-            if D[i][j] > MaxDist:
-                MaxDist = D[i][j]
+            if self.D[i][j] > MaxDist:
+                MaxDist = self.D[i][j]
         return MaxDist
 
+
 if __name__ == "__main__":
+    G = MGraph(6, 11)
+    input = [
+        3, 4, 70, 1, 2, 1, 5, 4, 50, 2, 6, 50, 5, 6, 60, 1, 3, 70, 4, 6, 60, 3,
+        6, 80, 5, 1, 100, 2, 4, 60, 5, 2, 80
+    ]
+
+    for i in np.arange(0, len(input), 1):
+        if i % 3 == 0:
+            a = input[i]
+        elif i % 3 == 1:
+            b = input[i]
+        else:
+            c = input[i]
+            G.InsertEdge(Enode(a, b, c))
+
+    G.Floyd()
+    print(G.FindMin())
+
